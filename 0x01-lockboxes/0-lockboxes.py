@@ -19,40 +19,41 @@ def look_next_opened_box(opened_boxes):
 def canUnlockAll(boxes):
     """Check if all boxes can be opened
     Args:
-        boxes (list): List which contains all the boxes with the keys
+        boxes (list): List which contain all the boxes with the keys
     Returns:
         bool: True if all boxes can be opened, otherwise, False
     """
     if len(boxes) <= 1 or boxes == [[]]:
         return True
 
-    opened_boxes = {}
+    aux = {}
     while True:
-        if len(opened_boxes) == 0:
-            opened_boxes[0] = {
+        if len(aux) == 0:
+            aux[0] = {
                 'status': 'opened',
                 'keys': boxes[0],
             }
-        keys = look_next_opened_box(opened_boxes)
+        keys = look_next_opened_box(aux)
         if keys:
             for key in keys:
                 try:
-                    if opened_boxes.get(key) and opened_boxes.get(key).get('status') == 'opened/checked':
+                    if aux.get(key) and aux.get(key).get('status') \
+                       == 'opened/checked':
                         continue
-                    opened_boxes[key] = {
+                    aux[key] = {
                         'status': 'opened',
                         'keys': boxes[key]
                     }
                 except (KeyError, IndexError):
                     continue
-        elif 'opened' in [box.get('status') for box in opened_boxes.values()]:
+        elif 'opened' in [box.get('status') for box in aux.values()]:
             continue
-        elif len(opened_boxes) == len(boxes):
+        elif len(aux) == len(boxes):
             break
         else:
             return False
 
-    return len(opened_boxes) == len(boxes)
+    return len(aux) == len(boxes)
 
 
 def main():
