@@ -1,29 +1,25 @@
 #!/usr/bin/python3
-"""
-Minimum Operations
-"""
+""" Minimum Operations"""
+
 
 def minOperations(n):
     """
-    Calculates the fewest number of operations needed to reach n 'H' characters in a file.
-
-    Args:
-        n (int): The target number of 'H' characters.
-
-    Returns:
-        int: The minimum number of operations required. Returns 0 if n is impossible to achieve.
+    minOperations
+    Gets fewest # of operations needed to reach exactly n H characters
     """
-    if n <= 1:
+    # all outputs should be at least 2 char: (min, Copy All => Paste)
+    if (n < 2):
         return 0
-
-    operations = 0
-    div = 2
-
-    while n > 1:
-        if n % div == 0:
-            operations += div  # Adds the current divisor to the operations count
-            n = n // div  # Updates n by dividing it by the current divisor
-        else:
-            div += 1  # Increments the divisor if n is not divisible by it
-
+    operations, divisor = 0, 2
+    while divisor <= n:
+        # if n evenly divides by divisor
+        if n % divisor == 0:
+            # total even-divisions by divisor = total operations
+            operations += divisor
+            # set n to the remainder
+            n = n / divisor
+            # reduce divisor to find remaining smaller vals that evenly-divide n
+            divisor -= 1
+        # increment divisor until it evenly-divides n
+        divisor += 1
     return operations
