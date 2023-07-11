@@ -21,9 +21,9 @@ def minOperations(n):
 
     while n > 1:
         if n % div == 0:
-            operations += div
-            n = n // div
+            operations += div  # Adds the current divisor to the operations count
+            n = n // div  # Updates n by dividing it by the current divisor
         else:
-            div += 1
+            div += 1  # Increments the divisor if n is not divisible by it
 
     return operations
