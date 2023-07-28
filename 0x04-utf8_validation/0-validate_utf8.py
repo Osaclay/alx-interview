@@ -5,33 +5,37 @@ UTF-8 Validation
 
 def validUTF8(data):
     """
-    Determines if a given data set represents a valid UTF-8 encoding.
-
-    Args:
-        data (list): A list of integers representing bytes of data.
-
-    Returns:
-        bool: True if data is a valid UTF-8 encoding, else False.
+    Method that determines if a given data set represents a valid
+    UTF-8 encoding.
     """
     num_bytes_to_check = 0
 
+    first_byte_mask = 1 << 7
+    continuation_byte_mask = 1 << 6
+
     for num in data:
-        byte = num & 255  # Keep only the 8 least significant bits
+
+        current_byte_mask = 1 << 7
+
         if num_bytes_to_check == 0:
-            if byte >> 7 == 0:
-                continue  # Single byte character (0xxxxxxx format)
-            elif byte >> 5 == 6:
-                num_bytes_to_check = 1  # Two bytes character (110xxxxx format)
-            elif byte >> 4 == 14:
-                num_bytes_to_check = 2  # Three bytes character (1110xxxx format)
-            elif byte >> 3 == 30:
-                num_bytes_to_check = 3  # Four bytes character (11110xxx format)
-            else:
-                return False  # Invalid byte
+
+            while current_byte_mask & num:
+                num_bytes_to_check += 1
+                current_byte_mask = current_byte_mask >> 1
+
+            if num_bytes_to_check == 0:
+                continue
+
+            if num_bytes_to_check == 1 or num_bytes_to_check > 4:
+                return False
 
         else:
-            if byte >> 6 != 2:
-                return False  # Following bytes must be of the format 10xxxxxx
-            num_bytes_to_check -= 1
+            if not (num & first_byte_mask and not (num & continuation_byte_mask)):
+                return False
 
-    return num_bytes_to_check == 0
+        num_bytes_to_check -= 1
+
+    if num_bytes_to_check == 0:
+        return True
+
+    return False
