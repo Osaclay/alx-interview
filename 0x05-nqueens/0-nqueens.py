@@ -12,7 +12,7 @@ def solve_n_queens(size):
     solutions = []
     queens = [-1] * size
     # queens is a one-dimension array, like [1, 3, 0, 2] means
-    # index represents row num and value represents col num
+    # index represents row no and value represents col no
 
     def dfs(index):
         """Recursively resolves the N queens problem"""
