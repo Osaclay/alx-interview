@@ -1,36 +1,42 @@
 #!/usr/bin/python3
+"""0. Prime Game - Maria and Ben"""
 
-def is_prime(num):
-    if num <= 1:
-        return False
-    if num <= 3:
-        return True
-    if num % 2 == 0 or num % 3 == 0:
-        return False
-    i = 5
-    while i * i <= num:
-        if num % i == 0 or num % (i + 2) == 0:
-            return False
-        i += 6
-    return True
 
 def isWinner(x, nums):
-    if x <= 0 or not nums:
+    """x - rounds
+    nums - numbers list
+    """
+    if x <= 0 or nums is None:
+        return None
+    if x != len(nums):
         return None
 
-    maria_wins = 0
-    ben_wins = 0
+    ben = 0
+    maria = 0
 
-    for n in nums:
-        prime_count = sum(1 for i in range(1, n + 1) if is_prime(i))
-        if prime_count % 2 == 0:
-            ben_wins += 1
+    n = [1 for x in range(sorted(nums)[-1] + 1)]
+    n[0], n[1] = 0, 0
+    for i in range(2, len(n)):
+        rm_multiples(n, i)
+
+    for i in nums:
+        if sum(n[0:i + 1]) % 2 == 0:
+            ben += 1
         else:
-            maria_wins += 1
-
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif maria_wins < ben_wins:
+            maria += 1
+    if ben > maria:
         return "Ben"
-    else:
-        return None
+    if maria > ben:
+        return "Maria"
+    return None
+
+
+def rm_multiples(lx, x):
+    """removes multiple
+    of primes
+    """
+    for i in range(2, len(lx)):
+        try:
+            lx[i * x] = 0
+        except (ValueError, IndexError):
+            break
